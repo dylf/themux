@@ -21,7 +21,10 @@ reset_status_right() {
 #  Read from the theme.yml file and set the variables
 ###
 get_theme_values() {
-  local theme_file="${PLUGIN_DIR}/theme.yml"
+  local theme_file="${XDG_CONFIG_HOME:-$HOME/.config}/themux/theme.yml"
+  if [[ ! -f $theme_file ]]; then
+    theme_file="${PLUGIN_DIR}/theme.yml"
+  fi
   while IFS=':' read -r key value; do
     value="${value//\"/}" # Remove all occurrences of double quotes
     value="${value#"${value%%[![:space:]]*}"}" # Trim leading whitespace
@@ -70,15 +73,15 @@ main() {
 
   reset_status_left
   # Session Name
-  create_segment_left ${color_purple} ${color_black} "#S"
+  create_segment_left ${color_magenta} ${color_black} "#S"
 
   reset_status_right
   # Time
-  create_segment_right ${color_black} ${color_pink} "%Y-%m-%d ${divider_left} %I:%M %p"
+  create_segment_right ${color_black} ${color_red} "%Y-%m-%d ${divider_left} %I:%M %p"
   # Hostname
-  create_segment_right ${color_pink} ${color_black} "#h"
+  create_segment_right ${color_red} ${color_black} "#h"
   # Session list
-  create_segment_right ${color_black} ${color_pink} "#(tms sessions)"
+  create_segment_right ${color_black} ${color_red} "#(tms sessions)"
 
   setw -g window-status-activity-style "underscore,fg=${color_grey},bg=${color_black}"
   setw -g window-status-separator  ""
